@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1f2020;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2d2d2d;
+    padding: 15px 30px;
+}
+
+.navbar a{
+    text-decoration: none;
+    color: white;
+    font-size: 30px;
+}
+
+.logo {
+    color: white;
+    font-size: 24px;
+    list-style: none;
+}
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.menu a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    color: #ffffff;
+}
+
+img{
+    display: flex;
+    width: 40%;
+}
+.title{
+    width: 58%;
+    display: flex;
+    justify-content: right;
+    color: #ffffff;
+    font-size: 150px;
+    margin-left: 200px;
+}
+
+.hero {
+    display: flex;
+    align-items: flex-start;
+}
+
+.hero img {
+    width: 50%;
+    height: 100vh;
+    object-fit: cover;
+}
+
+.title {
+    width: 10%;
+    color: #ffffff;
+    font-size: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 200px;
+    flex-direction: column;
+    gap: 20px;
+}
+.title button{
+    padding: 10px 20px;
+    border: none;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    border-radius: 2px;
+}
+
+h3{
+    font-size: large;
+}
+
+.title a {
+    font-size: large;
+    color: rgb(199, 255, 94);
+    list-style: none;
+    text-decoration: none;
+}
+
+.copyright {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        color: rgb(255, 255, 255);
+    }

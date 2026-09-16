@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Portfólio</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <h1>Bem-vindo</h1>
+                <p class="login-subtitle">Acesse seu portfólio</p>
+            </div>
+
+            <form onsubmit="logar(); return false;">
+                <div class="input-group">
+                    <input type="text" id="login" required autocomplete="off">
+                    <label>Usuário</label>
+                    <div class="input-line"></div>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="senha" required>
+                    <label>Senha</label>
+                    <button type="button" class="toggle-pass" onclick="toggleSenha()">
+                        <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                        <svg class="eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:none;">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                    </button>
+                    <div class="input-line"></div>
+                </div>
+
+                <div id="mensagem" class="error-msg" style="display: none;"></div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn-primary">Entrar</button>
+                    <button type="button" class="btn-secondary" onclick="cancelar()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+    <script>
+        if (sessionStorage.getItem('autenticado') === 'true') {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+
+</html>

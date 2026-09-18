@@ -1,10 +1,9 @@
 const express = require('express');
-const mysql = require('mysql2');
 const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -12,27 +11,41 @@ app.use(express.json());
 // Servir arquivos estaticos do portfolio
 app.use(express.static(path.join(__dirname)));
 
-// Conexao com o banco portfolio
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '12345',
-    database: 'portfolio'
-});
+// Tenta conectar ao MySQL (opcional - sem ele o site funciona normalmente)
+let db = null;
+let dbConnected = false;
 
-db.connect((err) => {
-    if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-        return;
-    }
-    console.log('Conectado ao MySQL - Banco: portfolio');
-});
+try {
+    const mysql = require('mysql2');
+    db = mysql.createConnection({
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASS || '12345',
+        database: process.env.DB_NAME || 'portfolio'
+    });
+
+    db.connect((err) => {
+        if (err) {
+            console.log('Banco de dados indisponivel. Modo estatico ativo.');
+            console.log('Para usar login/cadastro, inicie o MySQL.');
+            dbConnected = false;
+        } else {
+            console.log('Conectado ao MySQL - Banco: portfolio');
+            dbConnected = true;
+        }
+    });
+} catch (e) {
+    console.log('Modo estatico ativo (sem banco de dados).');
+}
 
 // Rota de login
 app.post('/api/login', (req, res) => {
+    if (!dbConnected || !db) {
+        return res.status(503).json({ success: false, message: 'Banco de dados indisponivel' });
+    }
+
     const { email, senha } = req.body;
 
-    // Buscar nos 3 tipos de usuario
     const sql = `
         SELECT id, nome, email, 'admin' AS tipo FROM admins WHERE email = ? AND senha = ?
         UNION
@@ -66,8 +79,12 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Rota para cadastrar usuario (para testes)
+// Rota para cadastrar usuario
 app.post('/api/cadastrar', (req, res) => {
+    if (!dbConnected || !db) {
+        return res.status(503).json({ success: false, message: 'Banco de dados indisponivel' });
+    }
+
     const { nome, email, senha, tipo } = req.body;
 
     let tabela;
@@ -93,7 +110,26 @@ app.post('/api/cadastrar', (req, res) => {
     });
 });
 
+// Status do servidor
+app.get('/api/status', (req, res) => {
+    res.json({
+        servidor: 'online',
+        banco: dbConnected ? 'conectado' : 'desconectado',
+        modo: dbConnected ? 'completo' : 'estatico'
+    });
+});
+
+// Fallback para rotas inexistentes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-    console.log(`Acesse o portfólio em http://localhost:${PORT}/index.html`);
+    console.log('=================================');
+    console.log('  PORTFOLIO EMANUEL FEITOSA');
+    console.log('=================================');
+    console.log(`Servidor: http://localhost:${PORT}`);
+    console.log(`Portofolio: http://localhost:${PORT}/index.html`);
+    console.log(`Status: http://localhost:${PORT}/api/status`);
+    console.log('=================================');
 });

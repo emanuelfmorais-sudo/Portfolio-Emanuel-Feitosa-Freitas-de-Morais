@@ -1,33 +1,53 @@
-const API_URL = 'http://localhost:3000';
+// Configuração do Supabase com as tuas credenciais reais
+const SUPABASE_URL = 'https://qetuedlddueqhdcahejj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFldHVlZGxkZHVlcWhkY2FoZWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwMDM4MTAsImV4cCI6MjEwNTU3OTgxMH0.6__rEwkA89wYHkZilrpwnZIIagwlArlkMKR2FNFk5fk';
 
-function logar() {
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function logar() {
     var email = document.getElementById("login").value;
     var senha = document.getElementById("senha").value;
     var msg = document.getElementById("mensagem");
 
-    fetch(`${API_URL}/api/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, senha })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
+    msg.style.display = "none";
+
+    try {
+        let usuarioEncontrado = null;
+        let tipoUsuario = '';
+
+        const tabelas = ['admins', 'professores', 'alunos'];
+
+        for (const tabela of tabelas) {
+            const { data, error } = await _supabase
+                .from(tabela)
+                .select('*')
+                .eq('email', email)
+                .eq('senha', senha)
+                .maybeSingle();
+
+            if (data) {
+                usuarioEncontrado = data;
+                tipoUsuario = tabela;
+                break;
+            }
+        }
+
+        if (usuarioEncontrado) {
             sessionStorage.setItem("autenticado", "true");
-            sessionStorage.setItem("usuario", JSON.stringify(data.user));
+            sessionStorage.setItem("usuario", JSON.stringify({ ...usuarioEncontrado, tipo: tipoUsuario }));
             window.location.href = "index.html";
         } else {
             msg.style.display = "block";
-            msg.textContent = data.message || "E-mail ou senha invalidos!";
+            msg.textContent = "E-mail ou senha inválidos!";
             document.getElementById("senha").value = "";
             document.getElementById("senha").focus();
         }
-    })
-    .catch(err => {
+
+    } catch (err) {
         msg.style.display = "block";
-        msg.textContent = "Erro ao conectar com o servidor!";
+        msg.textContent = "Erro ao conectar com o banco de dados!";
         console.error('Erro:', err);
-    });
+    }
 }
 
 function cancelar() {

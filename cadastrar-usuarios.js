@@ -1,14 +1,13 @@
-const mysql = require('mysql2/promise');
+const { createClient } = require('@supabase/supabase-js');
+
+// Configuração do Supabase com as tuas credenciais reais
+const SUPABASE_URL = 'https://qetuedlddueqhdcahejj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFldHVlZGxkZHVlcWhkY2FoZWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwMDM4MTAsImV4cCI6MjEwNTU3OTgxMH0.6__rEwkA89wYHkZilrpwnZIIagwlArlkMKR2FNFk5fk';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function main() {
-    const db = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '12345',
-        database: 'portfolio'
-    });
-
-    console.log('Conectado ao MySQL - Banco: portfolio\n');
+    console.log('Conectado ao Supabase!\n');
 
     const usuarios = [
         {
@@ -37,40 +36,38 @@ async function main() {
     let erros = 0;
 
     for (const user of usuarios) {
-        try {
-            if (user.tipo === 'admin') {
-                await db.execute(
-                    'INSERT INTO admins (nome, email, senha) VALUES (?, ?, ?)',
-                    [user.nome, user.email, user.senha]
-                );
-            } else if (user.tipo === 'professor') {
-                await db.execute(
-                    'INSERT INTO professores (nome, email, senha, departamento) VALUES (?, ?, ?, ?)',
-                    [user.nome, user.email, user.senha, user.departamento]
-                );
-            } else if (user.tipo === 'aluno') {
-                await db.execute(
-                    'INSERT INTO alunos (nome, email, senha, matricula) VALUES (?, ?, ?, ?)',
-                    [user.nome, user.email, user.senha, user.matricula]
-                );
-            }
-            console.log(`✓ [${user.tipo}] ${user.nome} - cadastrado com sucesso`);
-            cadastrados++;
-        } catch (err) {
-            if (err.code === 'ER_DUP_ENTRY') {
+        let tabela = '';
+        let dadosParaInserir = {};
+
+        if (user.tipo === 'admin') {
+            tabela = 'admins';
+            dadosParaInserir = { nome: user.nome, email: user.email, senha: user.senha };
+        } else if (user.tipo === 'professor') {
+            tabela = 'professores';
+            dadosParaInserir = { nome: user.nome, email: user.email, senha: user.senha, departamento: user.departamento };
+        } else if (user.tipo === 'aluno') {
+            tabela = 'alunos';
+            dadosParaInserir = { nome: user.nome, email: user.email, senha: user.senha, matricula: user.matricula };
+        }
+
+        const { data, error } = await supabase.from(tabela).insert([dadosParaInserir]);
+
+        if (error) {
+            if (error.code === '23505') {
                 console.log(`✗ [${user.tipo}] ${user.nome} - email já cadastrado`);
             } else {
-                console.log(`✗ [${user.tipo}] ${user.nome} - erro: ${err.message}`);
+                console.log(`✗ [${user.tipo}] ${user.nome} - erro: ${error.message}`);
             }
             erros++;
+        } else {
+            console.log(`✓ [${user.tipo}] ${user.nome} - cadastrado com sucesso`);
+            cadastrados++;
         }
     }
 
     console.log(`\n--- Resumo ---`);
     console.log(`Cadastrados: ${cadastrados}`);
     console.log(`Erros/Duplicados: ${erros}`);
-
-    await db.end();
 }
 
 main();

@@ -25,7 +25,7 @@
             <form onsubmit="logar(); return false;">
                 <div class="input-group">
                     <input type="text" id="login" required autocomplete="off">
-                    <label>Usuário</label>
+                    <label>Usuário (E-mail)</label>
                     <div class="input-line"></div>
                 </div>
 
@@ -55,6 +55,8 @@
         </div>
     </div>
 
+    <!-- CDN do SDK JavaScript do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="login.js"></script>
     <script>
         if (sessionStorage.getItem('autenticado') === 'true') {

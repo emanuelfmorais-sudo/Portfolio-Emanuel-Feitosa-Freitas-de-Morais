@@ -1,7 +1,8 @@
-// Configuração do Supabase com suas credenciais
+// Credenciais exatas do seu projeto no Supabase
 const SUPABASE_URL = 'https://qetuedlddueqhdcahejj.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFldHVlZGxkZHVlcWhkY2FoZWpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAwMDM4MTAsImV4cCI6MjEwNTU3OTgxMH0.6__rEwkA89wYHkZilrpwnZIIagwlArlkMKR2FNFk5fk';
 
+// Inicialização da biblioteca
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function logar() {
@@ -46,7 +47,7 @@ async function logar() {
     } catch (err) {
         msg.style.display = "block";
         msg.textContent = "Erro ao conectar com o banco de dados!";
-        console.error('Erro:', err);
+        console.error('Erro detalhado:', err);
     }
 }
 

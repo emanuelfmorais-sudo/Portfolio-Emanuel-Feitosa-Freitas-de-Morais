@@ -11,20 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
         yearElement.textContent = new Date().getFullYear();
     }
 
-    // Mostrar usuario logado + botao logout na nav
+    // Mostrar usuario logado + botao logout na nav (juntos no mesmo item)
     const navUl = document.querySelector('nav ul');
     if (navUl) {
+        const liConta = document.createElement('li');
+        liConta.style.cssText = 'display:flex;align-items:center;gap:6px;';
+
         const usuario = JSON.parse(sessionStorage.getItem('usuario') || '{}');
         if (usuario.nome) {
-            const liUser = document.createElement('li');
             const span = document.createElement('span');
             span.textContent = usuario.nome;
             span.style.cssText = 'color:#00d4ff;font-size:12px;font-weight:600;padding:8px 14px;background:rgba(0,212,255,0.08);border-radius:20px;border:1px solid rgba(0,212,255,0.2);pointer-events:none;';
-            liUser.appendChild(span);
-            navUl.appendChild(liUser);
+            liConta.appendChild(span);
         }
 
-        const li = document.createElement('li');
         const a = document.createElement('a');
         a.href = '#';
         a.textContent = 'SAIR';
@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
             a.style.borderColor = 'rgba(255, 107, 107, 0.3)';
             a.style.color = '#ff6b6b';
         });
-        li.appendChild(a);
-        navUl.appendChild(li);
+        liConta.appendChild(a);
+        navUl.appendChild(liConta);
     }
 
     // Lightbox

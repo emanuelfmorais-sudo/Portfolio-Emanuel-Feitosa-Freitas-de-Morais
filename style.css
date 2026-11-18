@@ -412,7 +412,7 @@ h1 {
     padding: 60px 0;
 }
 
-.centralizaranexos .card-anexo {
+.centralizaranexos .card-anexo:not([hidden]) {
     width: 100%;
     max-width: 1100px;
     min-height: 320px;

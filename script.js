@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Lightbox
-    const cardImages = document.querySelectorAll('.card_eixo img');
+    const cardImages = document.querySelectorAll('.card_eixo img, .centralizaranexos img');
     if (cardImages.length === 0) return;
 
     const lightbox = document.createElement('div');

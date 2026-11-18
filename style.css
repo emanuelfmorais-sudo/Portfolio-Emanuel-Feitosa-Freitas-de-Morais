@@ -90,7 +90,7 @@ a:hover {
 }
 
 /* Active nav link */
-.sobremim, .projetos, .areas, .ppe, .contatos, .senai,
+.sobremim, .projetos, .areas, .ppe, .contatos, .senai, .anexos,
 .linguagens, .humanas, .natureza, .matematica {
     color: var(--accent) !important;
     background: var(--accent-glow) !important;
@@ -382,6 +382,52 @@ h1 {
 .centralizarppe img:hover {
     border-color: var(--border-accent);
     box-shadow: var(--shadow-glow);
+}
+
+/* ===== ANEXOS ===== */
+.centralizaranexos {
+    display: flex;
+    justify-content: center;
+    padding: 40px 24px 80px;
+}
+
+.centralizaranexos img {
+    width: 100%;
+    max-width: 1100px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.centralizaranexos img:hover {
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow);
+}
+
+.centralizaranexos .em-breve {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    padding: 60px 0;
+}
+
+.centralizaranexos .card-anexo {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    border: 1px dashed var(--border-accent);
+    border-radius: var(--radius-lg);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 40px;
+    box-sizing: border-box;
 }
 
 /* ===== MONITORES ===== */
